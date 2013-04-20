@@ -60,7 +60,7 @@
                           dataType: "jsonp",
                           success: function(data_json){
                                    ciudades = data_json;
-
+                                   
                                    for(var id_ciudad in ciudades){
                                    li_ciudad = $("<li/>");
                                    a_ciudad = $("<a/>",{
@@ -72,28 +72,28 @@
                                    return false;
 
                                    });
-
+                                   
                                    li_ciudad.append(a_ciudad);
                                    $("#list_ciudades").append(li_ciudad);
                                    }
-
+                                   
                                    $("#list_ciudades").listview("refresh");
                                    $.mobile.loading("hide");
-
+                                   
                                    },
                                    error: function(err){
                                     console.log("Error:" + err);
                       }
-
+                      
                      });
 
-                     }
+                     };
 
                      function loadComplejos(id_ciudad){
                      $("#list_complejos").children().remove("li");
-
+                     
                      complejos = ciudades[id_ciudad].complejos;
-
+                     
                      for(var i=0; i< complejos.length; i++){
 
                        li_complejo = $("<li/>");
@@ -105,21 +105,23 @@
                            loadCartelera($(event.target).attr("alt"));
                            return false;
                            });
-
+                        
                         li_complejo.append(a_complejo);
                         $("#list_complejos").append(li_complejo);
                      }
-
+                     
                      $.mobile.changePage($("#complejos"));
                      $("#list_complejos").listview("refresh");
                      }
-
+                     
+                     
+                     
                       function loadCartelera(id_complejo){
                               $.mobile.loading({
                                                textVisible:false,
                                                theme:"a"
                                                })
-                              $("#list_complejos).children().remove("li");
+                              $("#list_films").children().remove("li");
 
                      $.ajax({
                           type: "GET",
@@ -130,23 +132,25 @@
                           dataType: "jsonp",
                           success: function(data_json){
 
-                                   var filmes=data_json:filmes;
+                                   var filmes=data_json.filmes;
 
                                      for(var i=0; i<filmes.length;i++){
+                                     var img_src="http://www.cinepolis.com.mx/imagenes/peliculas/" +filmes[i].nombre.split("-")[0].replace("Dig","").replace("IMAX","").replace("4DX","").replace("Dob","").replace("3D","").replace("Sub","")+".cartel.jpg";
 
                                      li_filme=$("<li/>");
-                                     a_filme=$("<a/>"),{
+                                     a_filme=$("<a/>",{
                                      "href":filmes[i].link
 
 
                              });
-                             img_filme=$(<"img/>",{
-                                                    "src":""
+                             
+                             img_filme=$("<img/>",{
+                                "src":img_src
                                                     })
                              h2_filme=$("<h2/>",{
                              "text":filmes[i].nombre
                              })
-
+                             
                              p_filme=$("<p/>",{
                              "html":filmes[i].descripcion
                              })
@@ -154,19 +158,20 @@
                              a_filme.append(h2_filme);
                              a_filme.append(p_filme);
                              li_filme.append(a_filme);
-
+                             
                              $("#list_films").append(li_filme);
                              }
                              $.mobile.changePage($("#cartelera"));
                              $("#list_films").listview("refresh");
                              $.mobile.loading("hide")
+                             
+
+                            }
+                          });
+                          }
 
 
-
-
-
-
-
+                     
 
 
 
@@ -174,14 +179,14 @@
             $.mobile.changePage($("#ciudades"));
             loadMain();
             });
-
-
-
+           
+           
+           
         </script>
 
     </head>
     <body>
-
+    
      <div data-role="page" id="ciudades">
       <div data-role="header" data-theme="b" data-position="fixed">
       <h2> Ciudades</h2>
@@ -197,16 +202,16 @@
           <h2> Cinepolis</h2>
        </div>
       </div>
-
-
-
+      
+      
+      
       <div data-role="page" id="complejos">
       <div data-role="header" data-theme="b" data-position="fixed">
       <h2> Complejos</h2>
         <a href="#" data-role="button" data-icon="back"
          data-iconopos="notext" data-rel="back" class="ui-btn-right"> back</a>
-
-
+         
+         
       </div>
       <div data-role="content">
       <ol id = "list_complejos" data-role ="listview" data-inset="true" data-filter= "true">
@@ -218,8 +223,8 @@
           <h2> Cinepolis</h2>
        </div>
       </div>
-
-
+      
+      
        <div data-role="page" id="cartelera">
       <div data-role="header" data-theme="b" data-position="fixed">
       <h2> Cartelera</h2>
@@ -229,7 +234,7 @@
 
       </div>
       <div data-role="content">
-      <ol id = "list_complejos" data-role ="listview" data-inset="true" data-filter= "true">
+      <ol id = "list_films" data-role ="listview" data-inset="true" data-filter= "true">
 
         <li> <a href="#">
            <img src="img/logo.png"
@@ -237,8 +242,8 @@
            <p> Descripción de la movie </p>
           </a>
        </li>
-
-
+       
+       
 
         <li> <a href="#">
            <img src="img/koala.jpg"
@@ -246,15 +251,15 @@
            <p> Descripcion de la movie 2 </p>
           </a>
        </li>
-
+       
        </ol>
        </div>
        <div data-role="footer" data-theme="b" data-position="fixed">
           <h2> Cinepolis</h2>
        </div>
       </div
-
-
+      
+      
     </body>
 </html>
 
